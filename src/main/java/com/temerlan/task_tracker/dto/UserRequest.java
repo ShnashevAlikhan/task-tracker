@@ -1,11 +1,17 @@
 package com.temerlan.task_tracker.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 
 public record UserRequest(
-        @NotNull @NotBlank String email,
-        @NotNull @NotBlank String name,
-        @NotNull @NotBlank String password
+
+        @NotNull
+        String email,
+
+        @NotNull String name,
+        @NotNull
+        @Size(min = 6, message = "Password is too short")
+        String password
 ) {
 }
