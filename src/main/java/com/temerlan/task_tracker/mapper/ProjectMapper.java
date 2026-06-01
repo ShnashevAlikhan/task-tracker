@@ -8,5 +8,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface ProjectMapper {
 
-    public ProjectResponse toResponse(Project project);
+    ProjectResponse toResponse(Project project);
 }

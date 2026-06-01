@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()
-                        .usernameParameter("e2mail")
+                        .usernameParameter("email")
                 )
                 .logout(logout -> logout.permitAll())
                 .build();

@@ -2,13 +2,10 @@ package com.temerlan.task_tracker.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 @Table(name = "tasks")
 public class Task {
     @Id
@@ -22,16 +19,58 @@ public class Task {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private TaskStatus status;
+    private TaskStatus status = TaskStatus.NEW;
 
     @Enumerated(EnumType.STRING)
-    private TaskPriority priority;
+    private TaskPriority priority = TaskPriority.LOW;
 
     @Column()
-    private LocalDate deadline;
+    private LocalDateTime deadline;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projects_id")
     private Project project;
+
+    public static Task create(
+            String title,
+            String description,
+            TaskStatus status,
+            TaskPriority priority,
+            LocalDateTime deadline
+    ){
+        Task task = new Task();
+
+        task.setTitle(title);
+        task.setDescription(description);
+        if(status != null) task.setStatus(status);
+        if(priority != null) task.setPriority(priority);
+        task.setDeadline(deadline);
+
+        return task;
+    }
+
+    protected void setTitle(String title) {
+        this.title = title;
+    }
+
+    protected void setDescription(String description) {
+        this.description = description;
+    }
+
+    protected void setStatus(TaskStatus status) {
+        this.status = status;
+    }
+
+    protected void setPriority(TaskPriority priority) {
+        this.priority = priority;
+    }
+
+    protected void setDeadline(LocalDateTime deadline) {
+        this.deadline = deadline;
+    }
+
+    protected void setProject(Project project) {
+        this.project = project;
+    }
 
 }

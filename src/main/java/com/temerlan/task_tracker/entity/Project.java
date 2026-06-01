@@ -1,10 +1,13 @@
 package com.temerlan.task_tracker.entity;
 
+import com.temerlan.task_tracker.exception.TaskNotFoundException;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -24,10 +27,68 @@ public class Project {
     @JoinColumn(name = "users_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "project")
-    private List<Task> task = new ArrayList<>();
+    @OneToMany(mappedBy = "project", orphanRemoval = true)
+    private List<Task> tasks = new ArrayList<>();
 
 
+    public Task updateTask(Long taskId,
+                            String title,
+                            String description,
+                            TaskStatus status,
+                            TaskPriority priority,
+                            LocalDateTime deadline) {
+        Task task = findTaskById(taskId);
+
+        if(title != null) {
+            task.setTitle(title);
+        }
+        if(description != null) {
+            task.setDescription(description);
+        }
+        if(status != null) {
+            task.setStatus(status);
+        }
+        if(priority != null) {
+            task.setPriority(priority);
+        }
+        if(deadline != null) {
+            task.setDeadline(deadline);
+        }
+
+        return task;
+    }
+    public void removeTask(Long taskId) {
+        if(taskId == null) throw new IllegalArgumentException("Task cannot be null");
+
+        Task task = findTaskById(taskId);
+
+        this.tasks.remove(task);
+        task.setProject(null);
+    }
+    public void attachTask(Task task) {
+        if(task == null) throw new IllegalArgumentException("Task cannot be null");
+
+        this.tasks.add(task);
+        task.setProject(this);
+    }
+
+    private Task findTaskById(Long taskId) {
+        return this.tasks.stream()
+                .filter(t -> Objects.equals(t.getId(), taskId))
+                .findFirst()
+                .orElseThrow(() -> new TaskNotFoundException("Task with id: " + taskId + " not found"));
+    }
+    public void updateProject(
+            String title,
+            String description
+    ) {
+        if(title != null) {
+            this.title = title;
+        }
+        if(description != null) {
+            this.description = description;
+        }
+    }
     public static Project create(
             String title,
             String description
@@ -37,15 +98,6 @@ public class Project {
         project.setDescription(description);
 
         return project;
-    }
-
-    public void update(
-            String title,
-            String description
-    ) {
-        if(title != null) this.setTitle(title);
-        if(description != null) this.setDescription(description);
-
     }
 
     private void setTitle(String title) {
@@ -60,7 +112,7 @@ public class Project {
         this.user = user;
     }
 
-    private void setTask(List<Task> task) {
-        this.task = task;
+    private void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 }

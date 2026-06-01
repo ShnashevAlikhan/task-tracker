@@ -68,6 +68,24 @@ public class GlobalHandlerException {
                 .status(HttpStatus.NOT_FOUND)
                 .body(apiError);
     }
+    @ExceptionHandler(TaskNotFoundException.class)
+    public ResponseEntity<ApiError> handlerTaskNotFound(
+            Exception ex,
+            HttpServletRequest request
+    ) {
+        ApiError apiError = new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                ex.getMessage(),
+                request.getRequestURI(),
+                null
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(apiError);
+    }
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiError> handlerIllegalArgumentException(
             Exception ex,

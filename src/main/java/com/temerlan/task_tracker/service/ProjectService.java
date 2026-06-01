@@ -60,7 +60,7 @@ public class ProjectService {
 
         Project project = findByIdAndUserId(projectId, currentUserId);
 
-        project.update(
+        project.updateProject(
                 update.title(),
                 update.description()
         );
