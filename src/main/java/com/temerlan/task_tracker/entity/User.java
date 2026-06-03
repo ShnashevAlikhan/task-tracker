@@ -1,14 +1,11 @@
 package com.temerlan.task_tracker.entity;
 
-import com.temerlan.task_tracker.exception.BadRequestException;
-import com.temerlan.task_tracker.exception.ProjectNotFoundException;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Getter
 @Entity
@@ -45,27 +42,12 @@ public class User {
         projects.add(project);
         project.setUser(this);
     }
-    private void removeProject(Project project) {
+    public void removeProject(Project project) {
         if(project == null) {
             throw new IllegalArgumentException("Project cannot be null");
         }
         projects.remove(project);
         project.setUser(null);
-    }
-
-    private Project findProjectById(Long projectId) {
-        if(projectId == null) throw new IllegalArgumentException("Project id cannot be null");
-
-        return this.projects.stream()
-                .filter(project -> Objects.equals(project.getId(), projectId))
-                .findFirst()
-                .orElseThrow(() -> new ProjectNotFoundException("Project with id: " + projectId + " not found"));
-    }
-
-    public void removeProject(Long projectId) {
-        Project project = findProjectById(projectId);
-
-        removeProject(project);
     }
 
     public static User create(

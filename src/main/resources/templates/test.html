@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task-tracker</title>
+    <link rel = "stylesheet" href="test.css">
+    <link rel ="icon" href = "7606205.png">
+</head>
+<body>
+<main>
+    <H1>Регистрация</H1>
+    <form action="/register" method="post">
+
+        <label for="email">Email</label>
+        <input id = "email" name="email" type = "email">
+
+        <label for="name">Имя</label>
+        <input id="name" name="name" type="text" required maxlength="30">
+
+        <label for="password">Пароль</label>
+        <input id="password" name="password" type="password" required maxlength="40">
+
+        <button type="submit">Создать аккаунт</button>
+    </form>
+</main>
+</body>
+</html>

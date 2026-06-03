@@ -49,6 +49,30 @@ public class Task {
         return task;
     }
 
+    public void updateTask(
+                           String title,
+                           String description,
+                           TaskStatus status,
+                           TaskPriority priority,
+                           LocalDateTime deadline) {
+
+        if(title != null) {
+            this.setTitle(title);
+        }
+        if(description != null) {
+            this.setDescription(description);
+        }
+        if(status != null) {
+            this.setStatus(status);
+        }
+        if(priority != null) {
+            this.setPriority(priority);
+        }
+        if(deadline != null) {
+            this.setDeadline(deadline);
+        }
+
+    }
     protected void setTitle(String title) {
         this.title = title;
     }

@@ -74,7 +74,9 @@ public class ProjectService {
 
         User user = findUserByIdOrThrow(userId);
 
-        user.removeProject(projectId);
+        Project project = findByIdAndUserId(projectId, userId);
+
+        user.removeProject(project);
 
         log.info("User with id: {} deleted project with id: {}", userId, projectId);
 

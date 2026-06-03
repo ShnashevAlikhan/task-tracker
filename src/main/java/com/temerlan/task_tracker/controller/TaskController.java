@@ -42,6 +42,16 @@ public class TaskController {
                 .body(body);
     }
 
+    @GetMapping("/{projectId}/tasks/{taskId}")
+    public ResponseEntity<TaskResponse> findTaskInProject(@PathVariable Long projectId,
+                                                          @PathVariable Long taskId) {
+        TaskResponse body = taskService.findTaskInProject(projectId, taskId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(body);
+    }
+
     @DeleteMapping("/{projectId}/tasks/{taskId}")
     public ResponseEntity<Void> deleteTaskInProject(@PathVariable Long projectId,
                                                     @PathVariable Long taskId) {
@@ -62,4 +72,5 @@ public class TaskController {
                 .status(HttpStatus.OK)
                 .body(body);
     }
+
 }

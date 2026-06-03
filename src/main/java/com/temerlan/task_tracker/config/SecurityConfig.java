@@ -41,6 +41,7 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(form -> form
                         .loginPage("/login")
+                        .defaultSuccessUrl("/app", true)
                         .permitAll()
                         .usernameParameter("email")
                 )
