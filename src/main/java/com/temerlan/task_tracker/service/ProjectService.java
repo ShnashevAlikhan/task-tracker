@@ -1,8 +1,10 @@
 package com.temerlan.task_tracker.service;
 
-import com.temerlan.task_tracker.dto.ProjectRequest;
-import com.temerlan.task_tracker.dto.ProjectResponse;
-import com.temerlan.task_tracker.dto.ProjectUpdate;
+import com.temerlan.task_tracker.dto.PageResponse;
+import com.temerlan.task_tracker.dto.projectDto.ProjectFilter;
+import com.temerlan.task_tracker.dto.projectDto.ProjectRequest;
+import com.temerlan.task_tracker.dto.projectDto.ProjectResponse;
+import com.temerlan.task_tracker.dto.projectDto.ProjectUpdate;
 import com.temerlan.task_tracker.entity.Project;
 import com.temerlan.task_tracker.entity.User;
 import com.temerlan.task_tracker.exception.ProjectNotFoundException;
@@ -10,11 +12,12 @@ import com.temerlan.task_tracker.exception.UserNotFoundException;
 import com.temerlan.task_tracker.mapper.ProjectMapper;
 import com.temerlan.task_tracker.repository.ProjectRepository;
 import com.temerlan.task_tracker.repository.UserRepository;
+import com.temerlan.task_tracker.specification.ProjectSpecification;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Slf4j
@@ -81,16 +84,22 @@ public class ProjectService {
         log.info("User with id: {} deleted project with id: {}", userId, projectId);
 
     }
-    public List<ProjectResponse> findAllProject() {
+    public PageResponse<ProjectResponse> findAllProject(ProjectFilter filter, Pageable page) {
         Long userId = currentUserService.getCurrentUserId();
 
-        List<Project> projects = projectRepository.findProjectsByUserId(userId);
-
         log.info("The user with id: {} viewed his project", userId);
-        return projects
-                .stream()
-                .map(projectMapper::toResponse)
-                .toList();
+
+        Page<Project> pages = projectRepository.findAll(ProjectSpecification.filter(userId, filter), page);
+
+        return new PageResponse(
+                pages.getContent().stream().map(projectMapper::toResponse).toList(),
+                pages.getNumber(),
+                pages.getSize(),
+                pages.getTotalElements(),
+                pages.getTotalPages(),
+                pages.isFirst(),
+                pages.isLast()
+        );
     }
 
     public ProjectResponse findProject(Long projectId) {

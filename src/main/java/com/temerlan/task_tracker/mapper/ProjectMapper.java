@@ -1,7 +1,7 @@
 package com.temerlan.task_tracker.mapper;
 
 
-import com.temerlan.task_tracker.dto.ProjectResponse;
+import com.temerlan.task_tracker.dto.projectDto.ProjectResponse;
 import com.temerlan.task_tracker.entity.Project;
 import org.mapstruct.Mapper;
 
@@ -9,4 +9,5 @@ import org.mapstruct.Mapper;
 public interface ProjectMapper {
 
     ProjectResponse toResponse(Project project);
+
 }

@@ -1,16 +1,19 @@
 package com.temerlan.task_tracker.controller;
 
-import com.temerlan.task_tracker.dto.ProjectRequest;
-import com.temerlan.task_tracker.dto.ProjectResponse;
-import com.temerlan.task_tracker.dto.ProjectUpdate;
+import com.temerlan.task_tracker.dto.*;
+import com.temerlan.task_tracker.dto.projectDto.*;
+import com.temerlan.task_tracker.exception.BadRequestException;
 import com.temerlan.task_tracker.service.ProjectService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
 
 @Slf4j
 @RestController
@@ -54,8 +57,25 @@ public class ProjectController {
                 .body(body);
     }
     @GetMapping
-    public List<ProjectResponse> findProjects() {
-        return projectService.findAllProject();
+    public ResponseEntity<PageResponse<ProjectResponse>> findProjects(@RequestParam(required = false, defaultValue = "1") int page,
+                                                                      @ModelAttribute ProjectFilter filter,
+                                                                      @RequestParam(required = false, defaultValue = "CREATED_AT") ProjectSortField sortBy,
+                                                                      @RequestParam(required = false, defaultValue = "ASC") String direction) {
+
+        int size = 10;
+        if (page < 1) {
+            throw new BadRequestException("Page cannot be negative");
+        }
+
+        int pageIndex = page - 1;
+
+        Pageable pageRequest = PageRequest.of(pageIndex, size, Sort.Direction.fromString(direction), sortBy.getProperty());
+
+        PageResponse<ProjectResponse> body = projectService.findAllProject(filter, pageRequest);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(body);
     }
 
     @GetMapping("/{projectId}")

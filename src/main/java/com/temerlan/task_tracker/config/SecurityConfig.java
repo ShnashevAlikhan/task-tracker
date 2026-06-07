@@ -35,13 +35,26 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register", "/login").permitAll()
+                        .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/register.html",
+                                "/login.html",
+                                "/projects.html",
+                                "/project-create.html",
+                                "/tasks.html",
+                                "/task-form.html",
+                                "/src/**",
+                                "/app.css",
+                                "/app.js"
+                        ).permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/users").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/app", true)
+                        .loginPage("/login.html")
+                        .defaultSuccessUrl("/projects.html", true)
                         .permitAll()
                         .usernameParameter("email")
                 )
@@ -61,6 +74,7 @@ public class SecurityConfig {
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
                 User user = userRepository.findByEmailIgnoreCase(username)
                         .orElseThrow(() -> new UsernameNotFoundException("User with email = " + username + " not found"));
+
                 Set<SimpleGrantedAuthority> roles = Collections.singleton(
                         new SimpleGrantedAuthority(user
                                 .getRole()

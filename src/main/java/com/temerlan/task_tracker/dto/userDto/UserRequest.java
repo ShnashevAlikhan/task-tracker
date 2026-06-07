@@ -1,4 +1,4 @@
-package com.temerlan.task_tracker.dto;
+package com.temerlan.task_tracker.dto.userDto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

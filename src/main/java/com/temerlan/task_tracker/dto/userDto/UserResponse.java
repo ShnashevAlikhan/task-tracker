@@ -1,4 +1,4 @@
-package com.temerlan.task_tracker.dto;
+package com.temerlan.task_tracker.dto.userDto;
 
 public record UserResponse(
         Long id,

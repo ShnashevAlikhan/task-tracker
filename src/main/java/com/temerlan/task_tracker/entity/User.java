@@ -63,6 +63,24 @@ public class User {
 
         return user;
     }
+
+    public void update(
+            String email,
+            String name,
+            String password
+    ) {
+
+        if(email != null) {
+            this.setEmail(email);
+        }
+        if(name != null) {
+            this.setName(name);
+        }
+        if(password != null) {
+            this.setPassword(password);
+        }
+
+    }
     protected void setEmail(String email) {
         this.email = email;
     }

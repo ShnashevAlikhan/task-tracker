@@ -1,7 +1,7 @@
 package com.temerlan.task_tracker.mapper;
 
-import com.temerlan.task_tracker.dto.UserRequest;
-import com.temerlan.task_tracker.dto.UserResponse;
+import com.temerlan.task_tracker.dto.userDto.UserRequest;
+import com.temerlan.task_tracker.dto.userDto.UserResponse;
 import com.temerlan.task_tracker.entity.User;
 import org.mapstruct.Mapper;
 

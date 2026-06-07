@@ -1,4 +1,4 @@
-package com.temerlan.task_tracker.dto;
+package com.temerlan.task_tracker.dto.taskDto;
 
 import com.temerlan.task_tracker.entity.TaskPriority;
 import com.temerlan.task_tracker.entity.TaskStatus;

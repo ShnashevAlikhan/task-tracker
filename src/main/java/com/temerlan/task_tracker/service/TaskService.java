@@ -1,8 +1,10 @@
 package com.temerlan.task_tracker.service;
 
-import com.temerlan.task_tracker.dto.TaskRequest;
-import com.temerlan.task_tracker.dto.TaskResponse;
-import com.temerlan.task_tracker.dto.TaskUpdate;
+import com.temerlan.task_tracker.dto.*;
+import com.temerlan.task_tracker.dto.taskDto.TaskFilter;
+import com.temerlan.task_tracker.dto.taskDto.TaskRequest;
+import com.temerlan.task_tracker.dto.taskDto.TaskResponse;
+import com.temerlan.task_tracker.dto.taskDto.TaskUpdate;
 import com.temerlan.task_tracker.entity.Project;
 import com.temerlan.task_tracker.entity.Task;
 import com.temerlan.task_tracker.exception.ProjectNotFoundException;
@@ -10,11 +12,12 @@ import com.temerlan.task_tracker.exception.TaskNotFoundException;
 import com.temerlan.task_tracker.mapper.TaskMapper;
 import com.temerlan.task_tracker.repository.ProjectRepository;
 import com.temerlan.task_tracker.repository.TaskRepository;
+import com.temerlan.task_tracker.specification.TaskSpecification;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Slf4j
@@ -65,16 +68,24 @@ public class TaskService {
         log.info("Task with id: {} viewed in project with id: {}", taskId, projectId);
         return taskMapper.toResponse(task);
     }
-    public List<TaskResponse> findAllTasksInProject(Long projectId) {
+    public PageResponse<TaskResponse> findAllTasksInProject(Long projectId, TaskFilter filter, Pageable page) {
         Long userId = currentUserService.getCurrentUserId();
 
         findProjectByIdAndUserIdOrThrow(projectId, userId);
 
         log.info("User viewed all tasks in project with id: {}", projectId);
-        return taskRepository.findByProjectId(projectId)
-                .stream()
-                .map(taskMapper::toResponse)
-                .toList();
+
+        Page<Task> pages = taskRepository.findAll(TaskSpecification.filter(projectId, userId, filter), page);
+
+        return new PageResponse<>(
+                pages.getContent().stream().map(taskMapper::toResponse).toList(),
+                pages.getNumber(),
+                pages.getSize(),
+                pages.getTotalElements(),
+                pages.getTotalPages(),
+                pages.isFirst(),
+                pages.isLast()
+        );
     }
 
     public void deleteTaskInProject(Long projectId, Long taskId) {
@@ -122,8 +133,8 @@ public class TaskService {
     private Task findByIdAndProject_IdAndProject_User_Id(
             Long taskId,
             Long projectId,
-            Long userId) {
-
+            Long userId)
+    {
         return taskRepository.findByIdAndProject_IdAndProject_User_Id(
                 taskId,
                 projectId,

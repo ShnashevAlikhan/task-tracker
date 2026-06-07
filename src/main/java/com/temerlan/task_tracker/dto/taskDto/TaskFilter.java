@@ -1,15 +1,18 @@
-package com.temerlan.task_tracker.dto;
+package com.temerlan.task_tracker.dto.taskDto;
 
 import com.temerlan.task_tracker.entity.TaskPriority;
 import com.temerlan.task_tracker.entity.TaskStatus;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
-public record TaskUpdate(
+
+public record TaskFilter(
+
         String title,
         String description,
         TaskStatus status,
         TaskPriority priority,
-        LocalDateTime deadline
+        LocalDate deadlineFrom,
+        LocalDate deadlineTo
 ) {
 }

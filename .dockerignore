@@ -1,0 +1,7 @@
+.git
+.idea
+target
+frontend
+*.iml
+.DS_Store
+local_history.patch

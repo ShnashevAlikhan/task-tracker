@@ -1,16 +1,17 @@
 package com.temerlan.task_tracker.controller;
 
-import com.temerlan.task_tracker.dto.TaskRequest;
-import com.temerlan.task_tracker.dto.TaskResponse;
-import com.temerlan.task_tracker.dto.TaskUpdate;
+import com.temerlan.task_tracker.dto.*;
+import com.temerlan.task_tracker.dto.taskDto.*;
+import com.temerlan.task_tracker.exception.BadRequestException;
 import com.temerlan.task_tracker.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/projects")
@@ -34,8 +35,24 @@ public class TaskController {
     }
 
     @GetMapping("/{projectId}/tasks")
-    public ResponseEntity<List<TaskResponse>> findAllTasksInProject(@PathVariable Long projectId) {
-        List<TaskResponse> body = taskService.findAllTasksInProject(projectId);
+    public ResponseEntity<PageResponse<TaskResponse>> findAllTasksInProject(
+            @PathVariable Long projectId,
+            @ModelAttribute TaskFilter filter,
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "ID") TaskSortField sortBy,
+            @RequestParam(required = false, defaultValue = "DESC") String direction)
+    {
+        int size = 10;
+        if (page < 1) {
+            throw new BadRequestException("Page cannot be negative");
+        }
+
+        int pageIndex = page - 1;
+
+
+        Pageable requestPages = PageRequest.of(pageIndex, size, Sort.by(Sort.Direction.fromString(direction), sortBy.getProperty()));
+
+        PageResponse<TaskResponse> body = taskService.findAllTasksInProject(projectId, filter, requestPages);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
