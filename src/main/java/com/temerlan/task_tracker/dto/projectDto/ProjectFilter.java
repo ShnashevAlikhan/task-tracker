@@ -6,6 +6,6 @@ public record ProjectFilter(
         String title,
         LocalDate createdFrom,
         LocalDate createdTo,
-        LocalDate updateAt
+        LocalDate updatedAt
 ) {
 }

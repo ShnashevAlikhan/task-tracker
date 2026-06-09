@@ -39,8 +39,8 @@ public class ProjectSpecification {
                 predicates.add(cb.lessThan(root.get("createdAt"), filter.createdTo().plusDays(1).atStartOfDay()));
             }
 
-            if(filter.updateAt() != null) {
-                predicates.add(cb.lessThan(root.get("updateAt"), filter.updateAt().plusDays(1).atStartOfDay()));
+            if(filter.updatedAt() != null) {
+                predicates.add(cb.lessThan(root.get("updatedAt"), filter.updatedAt().plusDays(1).atStartOfDay()));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));

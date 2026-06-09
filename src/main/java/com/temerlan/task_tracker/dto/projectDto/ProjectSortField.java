@@ -3,9 +3,9 @@ package com.temerlan.task_tracker.dto.projectDto;
 public enum ProjectSortField {
     TITLE("title"),
     CREATED_AT("createdAt"),
-    UPDATE_AT("updateAt");
+    UPDATED_AT("updatedAt");
 
-    private String property;
+    private final String property;
 
         ProjectSortField(String property) {
             this.property = property;

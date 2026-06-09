@@ -36,24 +36,14 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/",
-                                "/index.html",
-                                "/register.html",
-                                "/login.html",
-                                "/projects.html",
-                                "/project-create.html",
-                                "/tasks.html",
-                                "/task-form.html",
-                                "/src/**",
-                                "/app.css",
-                                "/app.js"
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
                         ).permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/users").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(form -> form
-                        .loginPage("/login.html")
                         .defaultSuccessUrl("/projects.html", true)
                         .permitAll()
                         .usernameParameter("email")

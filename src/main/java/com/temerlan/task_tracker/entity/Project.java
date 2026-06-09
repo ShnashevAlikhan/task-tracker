@@ -25,17 +25,17 @@ public class Project {
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
     @PrePersist
     public void prePersist() {
         createdAt = LocalDateTime.now();
-        updateAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
     public void preUpdate() {
-        updateAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
