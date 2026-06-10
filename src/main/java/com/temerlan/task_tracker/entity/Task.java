@@ -3,6 +3,8 @@ package com.temerlan.task_tracker.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -15,7 +17,7 @@ public class Task {
     @Column(nullable = false)
     private String title;
 
-    @Column()
+    @Column(nullable = true)
     private String description;
 
     @Enumerated(EnumType.STRING)
@@ -24,12 +26,15 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private TaskPriority priority = TaskPriority.LOW;
 
-    @Column()
+    @Column(nullable = true)
     private LocalDateTime deadline;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projects_id")
     private Project project;
+
+    @OneToMany(mappedBy = "task", orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public static Task create(
             String title,
@@ -72,6 +77,19 @@ public class Task {
             this.setDeadline(deadline);
         }
 
+    }
+
+    public void removeComment(Comment comment) {
+        if(comment == null) throw new IllegalArgumentException("Comment cannot be null");
+
+        this.comments.remove(comment);
+        comment.setTask(null);
+    }
+    public void attachComment(Comment comment) {
+        if(comment == null) throw new IllegalArgumentException("Comment cannot be null");
+
+        this.comments.add(comment);
+        comment.setTask(this);
     }
     protected void setTitle(String title) {
         this.title = title;

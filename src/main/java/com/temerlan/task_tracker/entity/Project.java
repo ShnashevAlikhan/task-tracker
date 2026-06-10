@@ -18,7 +18,7 @@ public class Project {
     @Column(nullable = false)
     private String title;
 
-    @Column()
+    @Column(nullable = true)
     private String description;
 
     @Column(nullable = false)

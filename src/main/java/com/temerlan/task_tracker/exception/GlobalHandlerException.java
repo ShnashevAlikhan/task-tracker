@@ -122,4 +122,23 @@ public class GlobalHandlerException {
                 .status(HttpStatus.CONFLICT)
                 .body(apiError);
     }
+
+    @ExceptionHandler(CommentNotFoundException.class)
+    public ResponseEntity<ApiError> handlerCommentNotFoundException(
+            Exception ex,
+            HttpServletRequest request
+    ) {
+        ApiError apiError = new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                ex.getMessage(),
+                request.getRequestURI(),
+                null
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(apiError);
+    }
 }

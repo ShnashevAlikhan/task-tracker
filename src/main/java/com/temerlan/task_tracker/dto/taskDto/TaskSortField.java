@@ -2,9 +2,6 @@ package com.temerlan.task_tracker.dto.taskDto;
 
 
 public enum TaskSortField {
-    ID("id"),
-    TITLE("title"),
-    DESCRIPTION("description"),
     STATUS("status"),
     PRIORITY("priority"),
     DEADLINE("deadline");

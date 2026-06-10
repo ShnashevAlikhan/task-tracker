@@ -1,7 +1,6 @@
 package com.temerlan.task_tracker.dto.projectDto;
 
 public enum ProjectSortField {
-    TITLE("title"),
     CREATED_AT("createdAt"),
     UPDATED_AT("updatedAt");
 
