@@ -77,15 +77,7 @@ public class TaskService {
 
         Page<Task> pages = taskRepository.findAll(TaskSpecification.filter(projectId, userId, filter), page);
 
-        return new PageResponse<>(
-                pages.getContent().stream().map(taskMapper::toResponse).toList(),
-                pages.getNumber(),
-                pages.getSize(),
-                pages.getTotalElements(),
-                pages.getTotalPages(),
-                pages.isFirst(),
-                pages.isLast()
-        );
+        return PageResponse.from(pages, taskMapper::toResponse);
     }
 
     public void deleteTaskInProject(Long projectId, Long taskId) {
@@ -138,7 +130,7 @@ public class TaskService {
         return taskRepository.findByIdAndProject_IdAndProject_User_Id(
                 taskId,
                 projectId,
-                userId
-        ).orElseThrow(() -> new TaskNotFoundException("Task with id: " + taskId + " not found"));
+                userId)
+                .orElseThrow(() -> new TaskNotFoundException("Task with id: " + taskId + " not found"));
     }
 }

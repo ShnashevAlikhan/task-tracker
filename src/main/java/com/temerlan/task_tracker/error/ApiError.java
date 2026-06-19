@@ -1,6 +1,7 @@
 package com.temerlan.task_tracker.error;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,5 +14,20 @@ public record ApiError(
         String message,
         String path,
         List<String> errors
-) {
+)
+{
+    public static ApiError of(
+            HttpStatus status,
+            String message,
+            String path
+    ) {
+        return new ApiError(
+                LocalDateTime.now(),
+                status.value(),
+                status.getReasonPhrase(),
+                message,
+                path,
+                null
+        );
+    }
 }

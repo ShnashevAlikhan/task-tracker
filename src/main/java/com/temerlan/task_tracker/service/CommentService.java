@@ -52,7 +52,7 @@ public class CommentService {
                               Long commentId) {
         Long userId = currentUserService.getCurrentUserId();
 
-        Task task = findOwnedTaskOrThrow(
+        findOwnedTaskOrThrow(
               taskId,
               projectId,
               userId
@@ -60,7 +60,7 @@ public class CommentService {
 
         Comment comment = findCommentInTaskOrThrow(commentId, taskId);
 
-        task.removeComment(comment);
+        commentRepository.delete(comment);
 
         log.info("Comment with id: {} deleted", comment.getId());
     }
@@ -108,15 +108,7 @@ public class CommentService {
 
         Page<Comment> pages = commentRepository.findAll(CommentSpecification.filter(projectId, taskId, filter), page);
 
-        return new PageResponse<>(
-                pages.getContent().stream().map(commentMapper::toResponse).toList(),
-                pages.getNumber(),
-                pages.getSize(),
-                pages.getTotalElements(),
-                pages.getTotalPages(),
-                pages.isFirst(),
-                pages.isLast()
-        );
+        return PageResponse.from(pages, commentMapper::toResponse);
     }
 
     private Task findOwnedTaskOrThrow(

@@ -91,15 +91,7 @@ public class ProjectService {
 
         Page<Project> pages = projectRepository.findAll(ProjectSpecification.filter(userId, filter), page);
 
-        return new PageResponse<>(
-                pages.getContent().stream().map(projectMapper::toResponse).toList(),
-                pages.getNumber(),
-                pages.getSize(),
-                pages.getTotalElements(),
-                pages.getTotalPages(),
-                pages.isFirst(),
-                pages.isLast()
-        );
+        return PageResponse.from(pages, projectMapper::toResponse);
     }
 
     public ProjectResponse findProject(Long projectId) {

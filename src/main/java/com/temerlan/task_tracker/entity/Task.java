@@ -79,12 +79,6 @@ public class Task {
 
     }
 
-    public void removeComment(Comment comment) {
-        if(comment == null) throw new IllegalArgumentException("Comment cannot be null");
-
-        this.comments.remove(comment);
-        comment.setTask(null);
-    }
     public void attachComment(Comment comment) {
         if(comment == null) throw new IllegalArgumentException("Comment cannot be null");
 

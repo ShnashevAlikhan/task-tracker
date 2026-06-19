@@ -81,7 +81,7 @@ public class CommentController {
         int size = 10;
         if (page < 1) {
             throw new BadRequestException("Page cannot be negative");
-        }
+        }   
 
         int pageIndex = page - 1;
 

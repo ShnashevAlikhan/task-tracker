@@ -11,7 +11,6 @@ import com.temerlan.task_tracker.mapper.UserMapper;
 import com.temerlan.task_tracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +26,6 @@ public class UserService {
     private final UserRepository repository;
     private final UserMapper mapper;
     private final PasswordEncoder passwordEncoder;
-
     private final CurrentUserService currentUserService;
 
 
@@ -36,15 +34,12 @@ public class UserService {
             throw new BadRequestException("User with email = " + request.email() + " already exists");
         }
 
-        UserRequest encodedRequest = new UserRequest(
-                request.email(),
-                request.name(),
-                passwordEncoder.encode(request.password())
-        );
+        String encodedPassword = passwordEncoder.encode(request.password());
+
         User user = User.create(
                 request.email(),
                 request.name(),
-                encodedRequest.password()
+                encodedPassword
         );
 
         repository.save(user);
